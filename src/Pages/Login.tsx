@@ -33,7 +33,7 @@ const Login = () => {
           
           <div className="space-y-4">
             <h1 className="text-7xl lg:text-8xl font-black bg-gradient-to-r from-green-600 via-green-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-2xl tracking-tight">
-              Grass
+              krunal
             </h1>
             <div className="space-y-2">
               <p className="text-2xl lg:text-3xl font-bold text-green-800">
@@ -87,7 +87,7 @@ const Login = () => {
                   <div className="relative group">
                     <Input
                       type="email"
-                      placeholder="your.email@grass.edu"
+                      placeholder="your.email@krunal.edu"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full pl-12 pr-4 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300 text-green-800 placeholder:text-green-400"
@@ -141,7 +141,7 @@ const Login = () => {
               {/* Sign up link */}
               {/* <div className="text-center pt-4">
                 <p className="text-green-700">
-                  New to Grass Institute?{" "}
+                  New to krunal Institute?{" "}
                   <a href="#" className="font-semibold text-green-600 hover:text-green-800 transition-colors hover:underline">
                     Create an account
                   </a>
