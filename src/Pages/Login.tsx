@@ -33,7 +33,7 @@ const Login = () => {
           
           <div className="space-y-4">
             <h1 className="text-7xl lg:text-8xl font-black bg-gradient-to-r from-green-600 via-green-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-2xl tracking-tight">
-              Jay
+              Grass
             </h1>
             <div className="space-y-2">
               <p className="text-2xl lg:text-3xl font-bold text-green-800">
