@@ -1,30 +1,30 @@
+import  { forgetpassword } from "@/apis/masterAdminApis";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Leaf, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ForgetPassword = () => {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+const {register,watch,handleSubmit}=useForm()
+const onSubmit=async(formData:any)=>{
+  try{
+let res=await forgetpassword(formData)
+if(res.status==200){
+  Swal.fire({
+    icon:"success",
+    text:"Mail Sended Succesfully"
+  })
+}
+}catch(error){
+    console.log(error)
+  }
+}
 
 
-  // Basic form validation and submission
-  const handleSubmit = (e:any) => {
-    e.preventDefault();
-    setEmailError("");
 
-    if (!email) {
-      setEmailError("Email is required");
-      return;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Please enter a valid email address");
-      return;
-    }
-
-    // Proceed with password reset logic (e.g., API call)
-    console.log("Password reset requested for:", { email });
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-green-50 to-emerald-100 flex items-center justify-center p-4 relative overflow-hidden">
@@ -92,7 +92,7 @@ const ForgetPassword = () => {
               </div>
 
               {/* Forget Password form */}
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Email field */}
                 <div className="space-y-2">
                   <label
@@ -107,19 +107,10 @@ const ForgetPassword = () => {
                       id="email"
                       type="email"
                       placeholder="your.email@grass.edu"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className={`w-full pl-12 pr-4 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300 text-green-800 placeholder:text-green-400 ${
-                        emailError ? "border-red-500" : ""
-                      }`}
-                      aria-describedby={emailError ? "email-error" : undefined}
+                 {...register("email")}
                     />
                     <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-400 group-focus-within:text-green-600 transition-colors" />
-                    {emailError && (
-                      <p id="email-error" className="text-red-500 text-sm mt-1">
-                        {emailError}
-                      </p>
-                    )}
+                  
                   </div>
                 </div>
 

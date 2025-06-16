@@ -4,11 +4,28 @@ import { Input } from "@/components/ui/input"
 import { Mail, Lock, Leaf, Sparkles, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { login } from "@/apis/masterAdminApis"
+import Swal from "sweetalert2"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const { register, watch, handleSubmit
+  } = useForm()
+  const onSubmit = async (formData: any) => {
+    try {
+      let res = await login(formData)
+      if (res.status == 200) {
+        Swal.fire({
+          text: res?.data?.message,
+          draggable: true,
+
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-green-50 to-emerald-100 flex items-center justify-center p-4 relative overflow-hidden">
@@ -21,7 +38,7 @@ const Login = () => {
 
       {/* Main container */}
       <div className="relative z-10 w-full max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
-        
+
         {/* Left section - Brand */}
         <div className="text-center lg:text-left space-y-8 px-8">
           <div className="inline-flex items-center justify-center lg:justify-start space-x-3 mb-8">
@@ -30,7 +47,7 @@ const Login = () => {
               <Sparkles className="absolute -top-2 -right-2 h-6 w-6 text-green-500 animate-spin" />
             </div>
           </div>
-          
+
           <div className="space-y-4">
             <h1 className="text-7xl lg:text-8xl font-black bg-gradient-to-r from-green-600 via-green-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-2xl tracking-tight">
               Grass
@@ -44,7 +61,7 @@ const Login = () => {
               </p>
             </div>
           </div>
-          
+
           {/* Decorative elements */}
           <div className="hidden lg:flex items-center space-x-4 text-green-600">
             <div className="flex items-center space-x-2">
@@ -61,12 +78,12 @@ const Login = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Right section - Login form */}
         <div className="flex justify-center lg:justify-end">
           <div className="w-full max-w-md">
             <div className="bg-white/90 backdrop-blur-xl rounded-lg shadow-2xl border border-green-200/50 p-12 space-y-8 transform hover:scale-[1.02] transition-all duration-300">
-              
+
               {/* Form header */}
               <div className="text-center space-y-2">
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
@@ -74,10 +91,10 @@ const Login = () => {
                 </h2>
                 <p className="text-green-700">Sign in to your account</p>
               </div>
-              
+
               {/* Login form */}
-              <div className="space-y-6">
-                
+              <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+
                 {/* Email field */}
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-green-800 flex items-center space-x-2">
@@ -88,14 +105,13 @@ const Login = () => {
                     <Input
                       type="email"
                       placeholder="your.email@krunal.edu"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      {...register("email")}
                       className="w-full pl-12 pr-4 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300 text-green-800 placeholder:text-green-400"
                     />
                     <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-400 group-focus-within:text-green-600 transition-colors" />
                   </div>
                 </div>
-                
+
                 {/* Password field */}
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-green-800 flex items-center space-x-2">
@@ -106,8 +122,8 @@ const Login = () => {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      {...register("password")}
+
                       className="w-full pl-12 pr-12 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300 text-green-800 placeholder:text-green-400"
                     />
                     <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-400 group-focus-within:text-green-600 transition-colors" />
@@ -120,24 +136,24 @@ const Login = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 {/* Forgot password */}
                 <div className="text-right">
                   <Link to='/forgetpassword' className="text-sm text-green-600 hover:text-green-800 transition-colors font-medium">
                     Forgot your password?
                   </Link>
                 </div>
-                
+
                 {/* Login button */}
-                <Button className="w-full py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 text-lg">
+                <Button type="submit" className="w-full py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 text-lg">
                   <span className="flex items-center justify-center space-x-2">
-                    <span>regeste</span>
+                    <span>Login</span>
                     <Sparkles className="h-5 w-5 animate-pulse" />
                   </span>
                 </Button>
-                
-              </div>
-              
+
+              </form>
+
               {/* Sign up link */}
               {/* <div className="text-center pt-4">
                 <p className="text-green-700">
@@ -147,14 +163,14 @@ const Login = () => {
                   </a>
                 </p>
               </div> */}
-              
+
             </div>
-            
-      
-            
+
+
+
           </div>
         </div>
-        
+
       </div>
     </div>
   )
