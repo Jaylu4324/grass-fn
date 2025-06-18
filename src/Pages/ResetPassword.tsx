@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Lock, Leaf, Sparkles, Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 type FormData = {
@@ -19,6 +19,7 @@ const ResetPassword = () => {
     watch,
     formState: { errors },
   } = useForm<FormData>();
+  const nav=useNavigate()
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
@@ -28,11 +29,12 @@ const ResetPassword = () => {
   const onSubmit = async (formData: FormData) => {
     try {
       let res = await resetPassword(formData, token);
-      if (res?.data == 200) {
+      if (res?.status == 200) {
         Swal.fire({
           icon: "success",
           text: "Password Reset Successfully",
         });
+        nav("/")
       }
     } catch (error) {
       console.error(error);
@@ -158,7 +160,7 @@ const ResetPassword = () => {
 
                 <div className="text-right">
                   <Link
-                    to="/login"
+                    to="/"
                     className="text-sm text-green-600 hover:text-green-800 font-medium hover:underline"
                   >
                     Sign in

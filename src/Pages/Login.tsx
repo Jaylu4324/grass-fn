@@ -17,6 +17,7 @@ const Login = () => {
       let res = await login(formData)
       if (res.status == 200) {
         Swal.fire({
+          icon:"success",
           text: res?.data?.message,
           draggable: true,
 

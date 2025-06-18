@@ -125,7 +125,7 @@ const ForgetPassword = () => {
                 <p className="text-green-700">
                   Remember your password?{" "}
                   <Link
-                    to="/login"
+                    to="/"
                     className="font-semibold text-green-600 hover:text-green-800 transition-colors hover:underline"
                   >
                     Sign in
