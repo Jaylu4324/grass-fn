@@ -1,59 +1,57 @@
+import { resetPassword } from "@/apis/masterAdminApis";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Lock, Leaf, Sparkles, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useSearchParams } from "react-router-dom";
+import Swal from "sweetalert2";
+
+type FormData = {
+  password: string;
+  confirmPassword: string;
+};
 
 const ResetPassword = () => {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [newPasswordError, setNewPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  // Form submission with validation
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setNewPasswordError("");
-    setConfirmPasswordError("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
 
-    let isValid = true;
-    if (!newPassword) {
-      setNewPasswordError("Password is required");
-      isValid = false;
-    } else if (newPassword.length < 6) {
-      setNewPasswordError("Password must be at least 6 characters");
-      isValid = false;
-    }
-
-    if (!confirmPassword) {
-      setConfirmPasswordError("Please confirm your password");
-      isValid = false;
-    } else if (newPassword !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
-      isValid = false;
-    }
-
-    if (isValid) {
-      // Proceed with password reset logic (e.g., API call with token)
-      console.log("Password reset submitted:", { newPassword });
+  const onSubmit = async (formData: FormData) => {
+    try {
+      let res = await resetPassword(formData, token);
+      if (res?.data == 200) {
+        Swal.fire({
+          icon: "success",
+          text: "Password Reset Successfully",
+        });
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
+  const passwordValue = watch("password");
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-green-50 to-emerald-100 flex items-center justify-center p-4 relative">
-      {/* Main container */}
       <div className="relative z-10 w-full max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
-        {/* Left section - Brand */}
+        {/* Left */}
         <div className="text-center lg:text-left space-y-8 px-8">
           <div className="inline-flex items-center justify-center lg:justify-start space-x-3 mb-8">
             <div className="relative">
-              <Leaf className="h-16 w-16 text-green-600 animate-bounce" aria-hidden="true" />
-              <Sparkles className="absolute -top-2 -right-2 h-6 w-6 text-green-500 animate-spin" aria-hidden="true" />
+              <Leaf className="h-16 w-16 text-green-600 animate-bounce" />
+              <Sparkles className="absolute -top-2 -right-2 h-6 w-6 text-green-500 animate-spin" />
             </div>
           </div>
-
           <div className="space-y-4">
             <h1 className="text-7xl lg:text-8xl font-black bg-gradient-to-r from-green-600 via-green-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-2xl tracking-tight">
               Grass
@@ -67,117 +65,87 @@ const ResetPassword = () => {
               </p>
             </div>
           </div>
-
-          {/* Decorative elements */}
-          <div className="hidden lg:flex items-center space-x-4 text-green-600">
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" aria-hidden="true"></div>
-              <span className="text-sm">Innovation</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse delay-300" aria-hidden="true"></div>
-              <span className="text-sm">Growth</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-emerald-600 rounded-full animate-pulse delay-700" aria-hidden="true"></div>
-              <span className="text-sm">Excellence</span>
-            </div>
-          </div>
         </div>
 
-        {/* Right section - Reset Password form */}
+        {/* Right */}
         <div className="flex justify-center lg:justify-end">
           <div className="w-full max-w-md">
-            <div className="bg-white/90 backdrop-blur-xl rounded-lg shadow-2xl border border-green-200/50 p-12 space-y-8 transform hover:scale-[1.02] transition-all duration-300">
-              {/* Form header */}
+            <div className="bg-white/90 backdrop-blur-xl rounded-lg shadow-2xl border border-green-200/50 p-12 space-y-8">
               <div className="text-center space-y-2">
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                   Set New Password
                 </h2>
-                <p className="text-green-700">
-                  Create a new password for your account
-                </p>
+                <p className="text-green-700">Create a new password for your account</p>
               </div>
 
-              {/* Reset Password form */}
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* New Password field */}
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {/* Password */}
                 <div className="space-y-2">
-                  <label
-                    htmlFor="new-password"
-                    className="text-sm font-semibold text-green-800 flex items-center space-x-2"
-                  >
+                  <label className="text-sm font-semibold text-green-800 flex items-center space-x-2">
                     <Lock className="h-4 w-4 text-green-600" />
                     <span>New Password</span>
                   </label>
                   <div className="relative group">
                     <Input
-                      id="new-password"
-                      type={showNewPassword ? "text" : "password"}
+                      type={showPassword ? "text" : "password"}
                       placeholder="Enter new password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      className={`w-full pl-12 pr-12 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300 text-green-800 placeholder:text-green-400 ${
-                        newPasswordError ? "border-red-500" : ""
-                      }`}
-                      aria-describedby={newPasswordError ? "new-password-error" : undefined}
+                      {...register("password", {
+                        required: "Password is required",
+                        minLength: {
+                          value: 6,
+                          message: "Password must be at least 6 characters",
+                        },
+                      })}
+                      className={`w-full pl-12 pr-12 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 text-green-800 placeholder:text-green-400`}
                     />
-                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-400 group-focus-within:text-green-600 transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-400" />
                     <button
                       type="button"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-green-400 hover:text-green-600 transition-colors"
-                      aria-label={showNewPassword ? "Hide password" : "Show password"}
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-green-400 hover:text-green-600"
+                      aria-label="Toggle password visibility"
                     >
-                      {showNewPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+                      {showPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
                     </button>
-                    {newPasswordError && (
-                      <p id="new-password-error" className="text-red-500 text-sm mt-1">
-                        {newPasswordError}
-                      </p>
+                    {errors.password && (
+                      <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
                     )}
                   </div>
                 </div>
 
-                {/* Confirm Password field */}
+                {/* Confirm Password */}
                 <div className="space-y-2">
-                  <label
-                    htmlFor="confirm-password"
-                    className="text-sm font-semibold text-green-800 flex items-center space-x-2"
-                  >
+                  <label className="text-sm font-semibold text-green-800 flex items-center space-x-2">
                     <Lock className="h-4 w-4 text-green-600" />
                     <span>Confirm Password</span>
                   </label>
                   <div className="relative group">
                     <Input
-                      id="confirm-password"
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm new password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      className={`w-full pl-12 pr-12 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300 text-green-800 placeholder:text-green-400 ${
-                        confirmPasswordError ? "border-red-500" : ""
-                      }`}
-                      aria-describedby={confirmPasswordError ? "confirm-password-error" : undefined}
+                      {...register("confirmPassword", {
+                        required: "Confirm password is required",
+                        validate: (value) =>
+                          value === passwordValue || "Passwords do not match",
+                      })}
+                      className={`w-full pl-12 pr-12 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 text-green-800 placeholder:text-green-400`}
                     />
-                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-400 group-focus-within:text-green-600 transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-400" />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-green-400 hover:text-green-600 transition-colors"
-                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-green-400 hover:text-green-600"
+                      aria-label="Toggle confirm password visibility"
                     >
                       {showConfirmPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
                     </button>
-                    {confirmPasswordError && (
-                      <p id="confirm-password-error" className="text-red-500 text-sm mt-1">
-                        {confirmPasswordError}
-                      </p>
+                    {errors.confirmPassword && (
+                      <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
                     )}
                   </div>
                 </div>
 
-                {/* Submit button */}
+                {/* Submit */}
                 <Button
                   type="submit"
                   className="w-full py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 text-lg"
@@ -188,12 +156,10 @@ const ResetPassword = () => {
                   </span>
                 </Button>
 
-                {/* Sign in link */}
                 <div className="text-right">
-                    
                   <Link
                     to="/login"
-                    className="text-sm text-green-600 hover:text-green-800 transition-colors font-medium hover:underline"
+                    className="text-sm text-green-600 hover:text-green-800 font-medium hover:underline"
                   >
                     Sign in
                   </Link>

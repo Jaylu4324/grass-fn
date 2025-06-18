@@ -1,30 +1,28 @@
-import  { forgetpassword } from "@/apis/masterAdminApis";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Mail, Leaf, Sparkles } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
+import { forgetpassword } from "@/apis/masterAdminApis"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Mail, Leaf, Sparkles } from "lucide-react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { Link } from "react-router-dom"
+import Swal from "sweetalert2"
 
 const ForgetPassword = () => {
-const {register,watch,handleSubmit}=useForm()
-const onSubmit=async(formData:any)=>{
-  try{
-let res=await forgetpassword(formData)
-if(res.status==200){
-  Swal.fire({
-    icon:"success",
-    text:"Mail Sended Succesfully"
-  })
-}
-}catch(error){
-    console.log(error)
+  const { register, handleSubmit } = useForm()
+
+  const onSubmit = async (formData: any) => {
+    try {
+      let res = await forgetpassword(formData)
+      if (res.status === 200) {
+        Swal.fire({
+          icon: "success",
+          text: "Mail Sent Successfully",
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
-}
-
-
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-green-50 to-emerald-100 flex items-center justify-center p-4 relative overflow-hidden">
@@ -60,18 +58,17 @@ if(res.status==200){
             </div>
           </div>
 
-          {/* Decorative elements */}
           <div className="hidden lg:flex items-center space-x-4 text-green-600">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" aria-hidden="true"></div>
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-sm">Innovation</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse delay-300" aria-hidden="true"></div>
+              <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse delay-300"></div>
               <span className="text-sm">Growth</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-emerald-600 rounded-full animate-pulse delay-700" aria-hidden="true"></div>
+              <div className="w-3 h-3 bg-emerald-600 rounded-full animate-pulse delay-700"></div>
               <span className="text-sm">Excellence</span>
             </div>
           </div>
@@ -91,9 +88,8 @@ if(res.status==200){
                 </p>
               </div>
 
-              {/* Forget Password form */}
+              {/* Form */}
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                {/* Email field */}
                 <div className="space-y-2">
                   <label
                     htmlFor="email"
@@ -107,14 +103,13 @@ if(res.status==200){
                       id="email"
                       type="email"
                       placeholder="your.email@grass.edu"
-                 {...register("email")}
+                      {...register("email")}
+                      className="w-full pl-12 pr-4 py-5 bg-white/80 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300 text-green-800 placeholder:text-green-400"
                     />
                     <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-400 group-focus-within:text-green-600 transition-colors" />
-                  
                   </div>
                 </div>
 
-                {/* Submit button */}
                 <Button
                   type="submit"
                   className="w-full py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 text-lg"
@@ -126,7 +121,6 @@ if(res.status==200){
                 </Button>
               </form>
 
-              {/* Back to login link */}
               <div className="text-center pt-4">
                 <p className="text-green-700">
                   Remember your password?{" "}
@@ -143,7 +137,7 @@ if(res.status==200){
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ForgetPassword;
+export default ForgetPassword
