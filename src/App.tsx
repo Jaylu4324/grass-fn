@@ -5,6 +5,7 @@ import ResetPassword from "./Pages/ResetPassword"
 import Sidebar  from "./section/Sidebar"
 import MainLayout from "./section/MainLayout"
 import Dashboard from "./Pages/Dashboard"
+import Student from "./Pages/student"
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/forgetpassword" element={<ForgotPassword/>} />
         <Route path="/resetpassword" element={<ResetPassword/>} />
         <Route path="/Dashboard" element={<Dashboard/>} />
+        <Route path="/student" element={<Student/>} />
 
 
 
