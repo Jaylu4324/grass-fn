@@ -5,7 +5,7 @@ const jsonconfig = { withCredentials: true }
 
 export const login = async (formData: any) => {
     try {
-    
+
         let res = await axios.post(`${back_End_url}/masterAdmin/login`, formData, jsonconfig)
         return res
     } catch (error) {
@@ -31,6 +31,14 @@ export const resetPassword = async (formData: any, token: any) => {
 export const adminProfile = async () => {
     try {
         let res = await axios.get(`${back_End_url}/masterAdmin/adminProfile`, jsonconfig)
+        return res
+    } catch (error) {
+        throw error
+    }
+}
+export const adminLogout = async () => {
+    try {
+        let res = await axios.delete(`${back_End_url}/masterAdmin/logout`, jsonconfig)
         return res
     } catch (error) {
         throw error

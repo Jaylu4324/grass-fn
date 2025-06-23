@@ -5,10 +5,13 @@ import { Mail, Lock, Leaf, Sparkles, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { login } from "@/apis/masterAdminApis"
+import { adminProfile, login } from "@/apis/masterAdminApis"
 import Swal from "sweetalert2"
+import { useDispatch } from "react-redux"
+
 
 const Login = () => {
+  const disp=useDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const { register, watch, handleSubmit
   } = useForm()
@@ -22,6 +25,10 @@ const Login = () => {
           draggable: true,
 
         })
+        let adminData=await adminProfile()
+       
+        disp({type:"login",payload:{userData:adminData.data.masterAdminProfile}})
+        
       }
     } catch (error) {
       console.log(error)
